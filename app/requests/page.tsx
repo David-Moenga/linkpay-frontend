@@ -76,7 +76,7 @@ export default function RequestsPage() {
                 <p className="text-sm text-slate-500">{r.description} · Merchant: {r.merchant_name}</p>
                 <p className="text-xs text-slate-400">Status: {r.status}</p>
               </div>
-              {r.status === "pending" && r.merchant_username !== localStorage.getItem("me_username") && (
+              {r.status === "pending" && r.merchant_username !== (typeof window !== "undefined" ? localStorage.getItem("me_username") : null) && (
                 <button onClick={()=>pay(r.reference)} disabled={loading} className="rounded bg-indigo-600 px-3 py-1 text-white hover:bg-indigo-700 disabled:opacity-50">
                   Pay
                 </button>

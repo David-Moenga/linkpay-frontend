@@ -25,7 +25,7 @@ export default function MerchantPage() {
   if (loading) return <p className="text-muted">Loading merchant dashboard…</p>;
   if (error) return <p className="text-red-600">{error}</p>;
 
-  const me = localStorage.getItem("me_username");
+  const me = typeof window !== "undefined" ? localStorage.getItem("me_username") : null;
   const sales = txs.filter((t: any) => t.recipient_username === me && t.status === "completed");
   const totalSales = sales.reduce((s: number, t: any) => s + Number(t.amount), 0);
   const pendingReqs = rqs.filter((r: any) => r.status === "pending");

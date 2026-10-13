@@ -28,21 +28,35 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md rounded border border-slate-200 bg-white p-6 shadow-sm">
-      <h2 className="text-2xl font-bold">Login</h2>
-      <form onSubmit={submit} className="mt-4 space-y-3">
+    <div className="mx-auto grid max-w-5xl gap-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-2 md:p-10">
+      <div className="flex flex-col justify-center">
+        <span className="text-sm font-semibold uppercase tracking-wider text-indigo-600">Welcome back</span>
+        <h2 className="mt-2 text-3xl font-bold text-slate-900">Sign in to LinkPay</h2>
+        <p className="mt-3 text-slate-600">
+          Access your wallet, send and receive payments, and stay on top of every transaction.
+        </p>
+        <div className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+          <p className="font-semibold text-slate-800">Test environment</p>
+          <p className="mt-1">Balances are simulated and clearly labeled. Not real money.</p>
+          <p className="mt-2">Demo: <span className="font-mono">alice@test.com</span> / <span className="font-mono">Strong!pass123</span></p>
+        </div>
+      </div>
+      <form onSubmit={submit} className="space-y-4">
         <div>
-          <label className="text-sm">Email</label>
-          <input type="email" className="mt-1 w-full rounded border px-3 py-2" value={email} onChange={(e)=>setEmail(e.target.value)} required />
+          <label className="text-sm font-medium text-slate-700">Email</label>
+          <input type="email" className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" value={email} onChange={(e)=>setEmail(e.target.value)} required />
         </div>
         <div>
-          <label className="text-sm">Password</label>
-          <input type="password" className="mt-1 w-full rounded border px-3 py-2" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+          <label className="text-sm font-medium text-slate-700">Password</label>
+          <input type="password" className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" value={password} onChange={(e)=>setPassword(e.target.value)} required />
         </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button disabled={loading} className="w-full rounded bg-indigo-600 py-2 text-white hover:bg-indigo-700 disabled:opacity-50">
-          {loading ? "Signing in..." : "Login"}
+        {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
+        <button disabled={loading} className="w-full rounded-lg bg-indigo-600 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60">
+          {loading ? "Signing in…" : "Sign in"}
         </button>
+        <p className="text-center text-sm text-slate-500">
+          New to LinkPay? <a href="/register" className="font-semibold text-indigo-600 hover:text-indigo-700">Create an account</a>
+        </p>
       </form>
     </div>
   );

@@ -12,99 +12,140 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  async function load() {
+    setLoading(true);
+    setError("");
+    try {
+      const [w, t, r] = await Promise.all([wallet.overview(), transactions.list(), requests.list()]);
+      setWalletData(w);
+      setTxs(t || []);
+      setPendingReqs((r || []).filter((x: any) => x.status === "pending"));
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     if (!localStorage.getItem("access_token")) { router.push("/login"); return; }
-    (async () => {
-      try {
-        const [w, t, r] = await Promise.all([wallet.overview(), transactions.list(), requests.list()]);
-        setWalletData(w);
-        setTxs(t || []);
-        setPendingReqs((r || []).filter((x: any) => x.status === "pending"));
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    load();
   }, [router]);
 
-  if (loading) return <p className="text-muted">Loading dashboard…</p>;
+  if (loading) return <div className="py-16 text-center text-slate-500">Loading dashboard…</div>;
   if (error) return <p className="text-red-600">{error}</p>;
 
-  const recentRecipients = Array.from(
+  const me = typeof window !== "undefined" ? localStorage.getItem("me_username") : null;
+  const incoming = txs.filter((t: any) => t.recipient_username === me && t.status === "completed");
+  const outgoing = txs.filter((t: any) => t.sender_username === me && t.status === "completed");
+  const totalIn = incoming.reduce((s, t) => s + Number(t.amount), 0);
+  const totalOut = outgoing.reduce((s, t) => s + Number(t.amount), 0);
+
+  const frequentRecipients = Array.from(
     new Map(
       txs
-        .filter((t: any) => t.recipient_username)
-        .map((t: any) => [t.recipient_username, { username: t.recipient_username, name: t.recipient_name }])
+        .filter((t: any) => t.recipient_username && t.recipient_username !== me)
+        .map((t: any) => [t.recipient_username, { username: t.recipient_username, name: t.recipient_name, count: 0 }])
     ).values()
   ).slice(0, 6);
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 p-6 text-white shadow-lg">
-        <p className="text-sm opacity-90">Available balance</p>
-        <p className="mt-1 text-4xl font-bold tracking-tight">
-          {walletData?.currency} {Number(walletData?.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-        </p>
-        <p className="mt-2 text-xs opacity-80">Test balance (simulated). Not real money.</p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <Link href="/send" className="rounded-lg bg-white px-4 py-2 font-semibold text-emerald-700 hover:bg-slate-50">Send money</Link>
-          <Link href="/receive" className="rounded-lg border border-white/40 px-4 py-2 font-semibold hover:bg-white/10">Receive</Link>
+      {/* Welcome */}
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="text-sm text-slate-500">Good to see you</p>
+          <h1 className="text-3xl font-bold text-slate-900">{walletData?.display_name}</h1>
+          <p className="text-sm text-slate-500">{walletData?.account_type?.replace("_", " ")} · {walletData?.public_id}</p>
+        </div>
+        <div className="flex gap-2">
+          <Link href="/send" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Send money</Link>
+          <Link href="/receive" className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Receive</Link>
+          <Link href="/requests" className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">New request</Link>
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <p className="text-sm text-slate-500">Wallet ID</p>
-          <p className="mt-1 font-mono text-sm font-semibold">{walletData?.public_id}</p>
+      {/* Balance + activity summary */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2">
+          <p className="text-sm text-slate-500">Available balance</p>
+          <p className="mt-1 text-5xl font-bold tracking-tight text-slate-900 tabular-nums">
+            {walletData?.currency} {Number(walletData?.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          </p>
+          <p className="mt-2 text-xs text-slate-400">Test balance (simulated). Not real money.</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <SummaryTile label="Received" value={`+${totalIn.toLocaleString()} ${walletData?.currency}`} tone="text-emerald-600" />
+            <SummaryTile label="Sent" value={`-${totalOut.toLocaleString()} ${walletData?.currency}`} tone="text-slate-900" />
+            <SummaryTile label="Transactions" value={txs.length} tone="text-slate-900" />
+          </div>
         </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <p className="text-sm text-slate-500">Pending requests</p>
-          <p className="mt-1 text-2xl font-bold">{pendingReqs.length}</p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Account</h3>
+          <dl className="mt-4 space-y-3 text-sm">
+            <Row label="Status" value={walletData?.is_verified ? "Verified" : "Unverified"} />
+            <Row label="Currency" value={walletData?.currency} />
+            <Row label="Public ID" value={walletData?.public_id} mono />
+            <Row label="Joined" value={walletData?.created_at ? new Date(walletData.created_at).toLocaleDateString() : "—"} />
+          </dl>
+          {pendingReqs.length > 0 && (
+            <div className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700">
+              {pendingReqs.length} pending payment request{pendingReqs.length > 1 ? "s" : ""}
+            </div>
+          )}
         </div>
-        <Link href="/merchant" className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:border-indigo-300">
-          <p className="text-sm text-slate-500">Merchant tools</p>
-          <p className="mt-1 text-2xl font-bold">Open →</p>
-        </Link>
       </div>
 
-      {recentRecipients.length > 0 && (
-        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-semibold">Frequent recipients</h2>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {recentRecipients.map((r: any) => (
+      {frequentRecipients.length > 0 && (
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">Frequent recipients</h2>
+            <Link href="/send" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">Send to one</Link>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {frequentRecipients.map((r: any) => (
               <Link
                 key={r.username}
                 href={`/send?to=${encodeURIComponent(r.username)}`}
-                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm hover:border-indigo-300 hover:bg-slate-50"
+                className="flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm transition hover:border-indigo-300 hover:bg-indigo-50"
               >
-                {r.name} <span className="text-slate-400">@{r.username}</span>
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700">
+                  {r.name?.[0]?.toUpperCase() || r.username[0].toUpperCase()}
+                </span>
+                <span className="font-medium">{r.name}</span>
+                <span className="text-slate-400">@{r.username}</span>
               </Link>
             ))}
           </div>
         </section>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Recent transactions</h2>
-            <Link href="/history" className="text-sm text-indigo-600 hover:text-indigo-700">View all</Link>
+            <h2 className="text-lg font-semibold text-slate-900">Recent transactions</h2>
+            <Link href="/history" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">View all</Link>
           </div>
           {txs.length === 0 ? (
-            <p className="mt-3 text-sm text-slate-500">No transactions yet.</p>
+            <p className="mt-4 text-sm text-slate-500">No transactions yet. Send or receive your first payment.</p>
           ) : (
             <ul className="mt-3 divide-y divide-slate-100">
-              {txs.slice(0, 5).map((t: any) => (
-                <li key={t.id} className="py-2">
-                  <Link href={`/transactions/${t.reference}`} className="flex items-center justify-between hover:text-indigo-600">
-                    <div>
-                      <p className="text-sm font-medium">{t.transaction_type.replace("_", " ")}</p>
-                      <p className="text-xs text-slate-500">{t.recipient_name} · {new Date(t.created_at).toLocaleDateString()}</p>
+              {txs.slice(0, 6).map((t: any) => (
+                <li key={t.id}>
+                  <Link href={`/transactions/${t.reference}`} className="flex items-center justify-between py-3 hover:bg-slate-50 -mx-2 px-2 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <span className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold ${t.recipient_username === me ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
+                        {t.recipient_username === me ? "↓" : "↑"}
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-slate-900">{t.transaction_type.replace("_", " ")}</p>
+                        <p className="text-xs text-slate-500">{t.recipient_username === me ? t.sender_name : t.recipient_name} · {new Date(t.created_at).toLocaleDateString()}</p>
+                      </div>
                     </div>
-                    <div className="text-right text-sm">
-                      <p className="font-semibold">{Number(t.amount).toLocaleString()} {t.currency}</p>
-                      <p className={t.status === "completed" ? "text-emerald-600 text-xs" : "text-amber-600 text-xs"}>{t.status}</p>
+                    <div className="text-right">
+                      <p className={`text-sm font-semibold tabular-nums ${t.recipient_username === me ? "text-emerald-600" : "text-slate-900"}`}>
+                        {t.recipient_username === me ? "+" : "-"}{Number(t.amount).toLocaleString()} {t.currency}
+                      </p>
+                      <p className="text-xs text-slate-400">{t.status}</p>
                     </div>
                   </Link>
                 </li>
@@ -113,32 +154,28 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Pending payment requests</h2>
-            <Link href="/requests" className="text-sm text-indigo-600 hover:text-indigo-700">Manage</Link>
+            <h2 className="text-lg font-semibold text-slate-900">Pending payment requests</h2>
+            <Link href="/requests" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">Manage</Link>
           </div>
           {pendingReqs.length === 0 ? (
-            <p className="mt-3 text-sm text-slate-500">No pending requests.</p>
+            <p className="mt-4 text-sm text-slate-500">No pending requests.</p>
           ) : (
             <ul className="mt-3 divide-y divide-slate-100">
-              {pendingReqs.slice(0, 5).map((r: any) => (
-                <li key={r.id} className="py-2 flex items-center justify-between">
+              {pendingReqs.slice(0, 6).map((r: any) => (
+                <li key={r.id} className="flex items-center justify-between py-3">
                   <div>
-                    <p className="text-sm font-medium">{r.reference}</p>
+                    <p className="text-sm font-medium text-slate-900">{r.reference}</p>
                     <p className="text-xs text-slate-500">{r.merchant_name} · {r.amount} {r.currency}</p>
                   </div>
-                  {r.merchant_username !== localStorage.getItem("me_username") && (
+                  {r.merchant_username !== me && (
                     <button
                       onClick={async () => {
-                        try { await requests.pay(r.reference); router.refresh(); }
-                        catch {}
-                        (async () => {
-                          const [t, rr] = await Promise.all([transactions.list(), requests.list()]);
-                          setTxs(t || []); setPendingReqs((rr || []).filter((x: any) => x.status === "pending"));
-                        })();
+                        try { await requests.pay(r.reference); } catch {}
+                        load();
                       }}
-                      className="rounded-lg bg-indigo-600 px-3 py-1 text-xs font-semibold text-white hover:bg-indigo-700"
+                      className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700"
                     >
                       Pay
                     </button>
@@ -149,6 +186,29 @@ export default function DashboardPage() {
           )}
         </section>
       </div>
+
+      {/* Security note */}
+      <div className="rounded-2xl border border-indigo-100 bg-indigo-50 p-5 text-sm text-indigo-900">
+        <strong>Security tip:</strong> verify the recipient name and username before authorizing any payment. Report suspicious activity from the transaction detail page.
+      </div>
+    </div>
+  );
+}
+
+function Row({ label, value, mono }: { label: string; value: any; mono?: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <dt className="text-slate-500">{label}</dt>
+      <dd className={`font-medium text-slate-900 ${mono ? "font-mono text-xs" : ""}`}>{value ?? "—"}</dd>
+    </div>
+  );
+}
+
+function SummaryTile({ label, value, tone }: { label: string; value: any; tone: string }) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
+      <p className={`mt-1 font-bold tabular-nums ${tone}`}>{value}</p>
     </div>
   );
 }
