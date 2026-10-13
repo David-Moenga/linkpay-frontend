@@ -25,7 +25,7 @@ export default function Home() {
             freelancers, suppliers, and their customers across Kenya and beyond.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/register" className="rounded-lg bg-indigo-500 px-6 py-3 font-semibold text-white shadow-lg hover:bg-indigo-400">
+            <Link href="/register" className="rounded-lg bg-slate-900 px-6 py-3 font-semibold text-white shadow-lg hover:bg-slate-800">
               Get started free
             </Link>
             <Link href="/login" className="rounded-lg border border-white/30 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur hover:bg-white/20">
@@ -81,7 +81,7 @@ export default function Home() {
               { n: "03", t: "Transact", d: "Send, request and pay with clear status, references and receipts." },
             ].map((s) => (
               <div key={s.n} className="rounded-2xl bg-white p-6 shadow-sm">
-                <p className="text-sm font-bold text-indigo-600">{s.n}</p>
+                <p className="text-sm font-bold text-[#8a6d1b]">{s.n}</p>
                 <h3 className="mt-2 text-xl font-semibold text-slate-900">{s.t}</h3>
                 <p className="mt-2 text-sm text-slate-600">{s.d}</p>
               </div>
@@ -100,7 +100,7 @@ export default function Home() {
               suspicious activity. Financial records are tamper-evident and never silently rewritten.
             </p>
             <div className="mt-6 flex gap-3">
-              <Link href="/register" className="rounded-lg bg-indigo-600 px-5 py-2.5 font-semibold text-white hover:bg-indigo-700">Create account</Link>
+              <Link href="/register" className="rounded-lg bg-slate-900 px-5 py-2.5 font-semibold text-white hover:bg-slate-800">Create account</Link>
               <Link href="/login" className="rounded-lg border border-slate-300 px-5 py-2.5 font-semibold text-slate-700 hover:bg-slate-50">Log in</Link>
             </div>
           </div>

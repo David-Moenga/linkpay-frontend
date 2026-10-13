@@ -29,7 +29,7 @@ export default function RegisterPage() {
   return (
     <div className="mx-auto grid max-w-5xl gap-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-2 md:p-10">
       <div className="flex flex-col justify-center">
-        <span className="text-sm font-semibold uppercase tracking-wider text-indigo-600">Get started</span>
+        <span className="text-sm font-semibold uppercase tracking-wider text-[#8a6d1b]">Get started</span>
         <h2 className="mt-2 text-3xl font-bold text-slate-900">Create your LinkPay account</h2>
         <p className="mt-3 text-slate-600">
           Join individuals, merchants, freelancers and suppliers transacting in one network.
@@ -47,17 +47,17 @@ export default function RegisterPage() {
       <form onSubmit={submit} className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Username">
-            <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" value={form.username} onChange={(e)=>setForm({...form,username:e.target.value})} required />
+            <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-[#8a6d1b] focus:ring-2 focus:ring-[#efe6c8]" value={form.username} onChange={(e)=>setForm({...form,username:e.target.value})} required />
           </Field>
           <Field label="Email">
-            <input type="email" className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" value={form.email} onChange={(e)=>setForm({...form,email:e.target.value})} required />
+            <input type="email" className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-[#8a6d1b] focus:ring-2 focus:ring-[#efe6c8]" value={form.email} onChange={(e)=>setForm({...form,email:e.target.value})} required />
           </Field>
         </div>
         <Field label="Password">
-          <input type="password" className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" value={form.password} onChange={(e)=>setForm({...form,password:e.target.value})} required />
+          <input type="password" className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-[#8a6d1b] focus:ring-2 focus:ring-[#efe6c8]" value={form.password} onChange={(e)=>setForm({...form,password:e.target.value})} required />
         </Field>
         <Field label="Account type">
-          <select className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" value={form.account_type} onChange={(e)=>setForm({...form,account_type:e.target.value})}>
+          <select className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-[#8a6d1b] focus:ring-2 focus:ring-[#efe6c8]" value={form.account_type} onChange={(e)=>setForm({...form,account_type:e.target.value})}>
             <option value="individual">Individual / Customer</option>
             <option value="merchant">Merchant / Small business</option>
             <option value="freelancer">Freelancer</option>
@@ -67,15 +67,15 @@ export default function RegisterPage() {
         </Field>
         {(form.account_type==="merchant"||form.account_type==="supplier") && (
           <Field label="Business name">
-            <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" value={form.business_name} onChange={(e)=>setForm({...form,business_name:e.target.value})} />
+            <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-[#8a6d1b] focus:ring-2 focus:ring-[#efe6c8]" value={form.business_name} onChange={(e)=>setForm({...form,business_name:e.target.value})} />
           </Field>
         )}
         {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
-        <button disabled={loading} className="w-full rounded-lg bg-indigo-600 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-60">
+        <button disabled={loading} className="w-full rounded-lg bg-slate-900 py-2.5 font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60">
           {loading ? "Creating account…" : "Sign up"}
         </button>
         <p className="text-center text-sm text-slate-500">
-          Already have an account? <a href="/login" className="font-semibold text-indigo-600 hover:text-indigo-700">Log in</a>
+          Already have an account? <a href="/login" className="font-semibold text-[#8a6d1b] hover:text-[#6f5612]">Log in</a>
         </p>
       </form>
     </div>

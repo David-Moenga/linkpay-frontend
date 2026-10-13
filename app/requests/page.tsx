@@ -43,7 +43,7 @@ export default function RequestsPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Payment requests</h2>
-        <button onClick={()=>setShowCreate(!showCreate)} className="rounded bg-indigo-600 px-3 py-1 text-white hover:bg-indigo-700">
+        <button onClick={()=>setShowCreate(!showCreate)} className="rounded bg-slate-900 px-3 py-1 text-white hover:bg-slate-800">
           {showCreate ? "Cancel" : "New request"}
         </button>
       </div>
@@ -62,7 +62,7 @@ export default function RequestsPage() {
             <label className="text-sm">Customer username (optional)</label>
             <input className="mt-1 w-full rounded border px-3 py-2" value={customer} onChange={e=>setCustomer(e.target.value)} />
           </div>
-          <button disabled={loading} className="rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 disabled:opacity-50">
+          <button disabled={loading} className="rounded bg-slate-900 px-4 py-2 text-white hover:bg-slate-800 disabled:opacity-50">
             {loading ? "Creating..." : "Create request"}
           </button>
         </form>
@@ -77,7 +77,7 @@ export default function RequestsPage() {
                 <p className="text-xs text-slate-400">Status: {r.status}</p>
               </div>
               {r.status === "pending" && r.merchant_username !== (typeof window !== "undefined" ? localStorage.getItem("me_username") : null) && (
-                <button onClick={()=>pay(r.reference)} disabled={loading} className="rounded bg-indigo-600 px-3 py-1 text-white hover:bg-indigo-700 disabled:opacity-50">
+                <button onClick={()=>pay(r.reference)} disabled={loading} className="rounded bg-slate-900 px-3 py-1 text-white hover:bg-slate-800 disabled:opacity-50">
                   Pay
                 </button>
               )}

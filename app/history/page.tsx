@@ -53,7 +53,7 @@ export default function HistoryPage() {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-semibold ${filter === f ? "bg-indigo-600 text-white" : "border border-slate-300 text-slate-700 hover:bg-slate-50"}`}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold ${filter === f ? "bg-slate-900 text-white" : "border border-slate-300 text-slate-700 hover:bg-slate-50"}`}
             >
               {f === "all" ? "All" : f === "in" ? "Received" : "Sent"}
             </button>
@@ -61,7 +61,7 @@ export default function HistoryPage() {
         </div>
       </div>
       <input
-        className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+        className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-[#8a6d1b] focus:ring-2 focus:ring-[#efe6c8]"
         placeholder="Search by reference, name or status..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -77,7 +77,7 @@ export default function HistoryPage() {
           return (
             <a key={t.id} href={`/transactions/${t.reference}`} className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
               <div className="flex items-center justify-between">
-                <p className="font-mono text-xs text-indigo-600">{t.reference}</p>
+                <p className="font-mono text-xs text-[#8a6d1b]">{t.reference}</p>
                 <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
                   t.status === "completed" ? "bg-emerald-100 text-emerald-700" :
                   t.status === "pending" ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
@@ -111,7 +111,7 @@ export default function HistoryPage() {
                 const incoming = t.recipient_username === me;
                 return (
                   <tr key={t.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 font-mono text-xs"><a href={`/transactions/${t.reference}`} className="text-indigo-600 hover:text-indigo-700">{t.reference}</a></td>
+                    <td className="px-4 py-3 font-mono text-xs"><a href={`/transactions/${t.reference}`} className="text-[#8a6d1b] hover:text-[#6f5612]">{t.reference}</a></td>
                     <td className="px-4 py-3">{incoming ? t.sender_name : t.recipient_name}</td>
                     <td className="px-4 py-3 text-slate-500">{t.transaction_type.replace("_", " ")}</td>
                     <td className={`px-4 py-3 text-right font-semibold tabular-nums ${incoming ? "text-emerald-600" : "text-slate-900"}`}>
