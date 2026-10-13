@@ -70,7 +70,31 @@ export default function HistoryPage() {
       {filtered.length === 0 ? (
         <p className="text-slate-500">No transactions match.</p>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <>
+        <div className="space-y-3 sm:hidden">
+        {filtered.map((t: any) => {
+          const incoming = t.recipient_username === (typeof window !== "undefined" ? localStorage.getItem("me_username") : null);
+          return (
+            <a key={t.id} href={`/transactions/${t.reference}`} className="block rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <p className="font-mono text-xs text-indigo-600">{t.reference}</p>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
+                  t.status === "completed" ? "bg-emerald-100 text-emerald-700" :
+                  t.status === "pending" ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"
+                }`}>{t.status}</span>
+              </div>
+              <p className="mt-2 text-sm text-slate-500">{incoming ? `From ${t.sender_name}` : `To ${t.recipient_name}`}</p>
+              <div className="mt-2 flex items-center justify-between">
+                <p className={`text-lg font-bold tabular-nums ${incoming ? "text-emerald-600" : "text-slate-900"}`}>
+                  {incoming ? "+" : "-"}{Number(t.amount).toLocaleString()} {t.currency}
+                </p>
+                <p className="text-xs text-slate-400">{new Date(t.created_at).toLocaleDateString()}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+      <div className="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm sm:block">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
               <tr>
@@ -106,6 +130,7 @@ export default function HistoryPage() {
             </tbody>
           </table>
         </div>
+        </>
       )}
     </div>
   );
