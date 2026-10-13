@@ -43,7 +43,7 @@ function SendForm() {
   if (result) {
     return (
       <div className="mx-auto max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-2xl font-bold text-emerald-600">Payment sent</h2>
+        <h2 className="text-2xl font-bold text-slate-900">Payment sent</h2>
         <div className="mt-4 space-y-2 text-sm">
           <p><span className="text-slate-500">Reference:</span> {result.reference}</p>
           <p><span className="text-slate-500">Amount:</span> {result.amount} {result.currency}</p>
@@ -64,7 +64,7 @@ function SendForm() {
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div>
           <label className="text-sm font-medium">Recipient</label>
-          <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-emerald-500" value={username} onChange={(e) => doLookup(e.target.value)} placeholder="Search by username" />
+          <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500" value={username} onChange={(e) => doLookup(e.target.value)} placeholder="Search by username" />
           {lookup.length > 0 && (
             <ul className="mt-1 rounded-lg border border-slate-200 bg-white shadow">
               {lookup.map((u: any) => (
@@ -77,16 +77,16 @@ function SendForm() {
         </div>
         <div className="mt-4">
           <label className="text-sm font-medium">Amount (KES)</label>
-          <input type="number" className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-emerald-500" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" />
+          <input type="number" className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" />
         </div>
         <div className="mt-4">
           <label className="text-sm font-medium">Description (optional)</label>
-          <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-emerald-500" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What is this for?" />
+          <input className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5 outline-none focus:border-indigo-500" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="What is this for?" />
         </div>
       </div>
 
       {!confirming ? (
-        <button onClick={() => setConfirming(true)} disabled={!username || !amount} className="w-full rounded-lg bg-emerald-600 py-3 font-semibold text-white hover:bg-emerald-700 disabled:opacity-50">
+        <button onClick={() => setConfirming(true)} disabled={!username || !amount} className="w-full rounded-lg bg-indigo-600 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50">
           Review payment
         </button>
       ) : (
@@ -98,7 +98,7 @@ function SendForm() {
             {description && <p><span className="text-slate-500">Note:</span> {description}</p>}
           </div>
           <div className="mt-4 flex gap-3">
-            <button onClick={submit} disabled={loading} className="flex-1 rounded-lg bg-emerald-600 py-2.5 font-semibold text-white hover:bg-emerald-700 disabled:opacity-50">
+            <button onClick={submit} disabled={loading} className="flex-1 rounded-lg bg-indigo-600 py-2.5 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50">
               {loading ? "Sending…" : "Confirm & send"}
             </button>
             <button onClick={() => setConfirming(false)} className="flex-1 rounded-lg border border-slate-300 py-2.5 font-semibold hover:bg-white">
@@ -114,7 +114,7 @@ function SendForm() {
 
 function LinkButton({ href, children }: { href: string; children: React.ReactNode }) {
   // eslint-disable-next-line @next/next/no-html-link-for-pages
-  return <a href={href} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">{children}</a>;
+  return <a href={href} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">{children}</a>;
 }
 
 

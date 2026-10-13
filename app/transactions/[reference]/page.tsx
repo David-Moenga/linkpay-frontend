@@ -32,7 +32,7 @@ export default function TransactionDetailPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <button onClick={() => router.back()} className="text-sm font-semibold text-emerald-600 hover:underline">← Back</button>
+      <button onClick={() => router.back()} className="text-sm font-semibold text-indigo-600 hover:underline">← Back</button>
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex items-start justify-between">
           <div>

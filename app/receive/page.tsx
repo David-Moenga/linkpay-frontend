@@ -39,7 +39,7 @@ export default function ReceivePage() {
               <p className="text-xs text-slate-500">Username</p>
               <p className="font-semibold">@{w?.username || me}</p>
             </div>
-            <button onClick={() => copy(w?.username || me || "")} className="text-sm font-semibold text-emerald-600">
+            <button onClick={() => copy(w?.username || me || "")} className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">
               {copied ? "Copied" : "Copy"}
             </button>
           </div>
@@ -48,7 +48,7 @@ export default function ReceivePage() {
               <p className="text-xs text-slate-500">Wallet ID</p>
               <p className="font-mono text-sm font-semibold">{w?.public_id}</p>
             </div>
-            <button onClick={() => copy(w?.public_id || "")} className="text-sm font-semibold text-emerald-600">
+            <button onClick={() => copy(w?.public_id || "")} className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">
               {copied ? "Copied" : "Copy"}
             </button>
           </div>
@@ -64,12 +64,12 @@ export default function ReceivePage() {
           <ul className="mt-3 divide-y divide-slate-100">
             {incoming.slice(0, 8).map((t: any) => (
               <li key={t.id} className="py-2">
-                <a href={`/transactions/${t.reference}`} className="flex items-center justify-between hover:text-emerald-600">
+                <a href={`/transactions/${t.reference}`} className="flex items-center justify-between hover:text-indigo-600">
                   <div>
                     <p className="text-sm font-medium">{t.sender_name}</p>
                     <p className="text-xs text-slate-500">{new Date(t.created_at).toLocaleDateString()} · {t.reference}</p>
                   </div>
-                  <p className="text-sm font-semibold text-emerald-600">+{Number(t.amount).toLocaleString()} {t.currency}</p>
+                  <p className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">+{Number(t.amount).toLocaleString()} {t.currency}</p>
                 </a>
               </li>
             ))}
@@ -77,7 +77,7 @@ export default function ReceivePage() {
         )}
       </div>
       <div className="text-center">
-        <a href="/requests" className="text-sm font-semibold text-emerald-600 hover:underline">Create a payment request →</a>
+        <a href="/requests" className="text-sm font-semibold text-indigo-600 hover:underline">Create a payment request →</a>
       </div>
     </div>
   );

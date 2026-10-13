@@ -38,7 +38,7 @@ export default function MerchantPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Merchant dashboard</h2>
-        <a href="/requests" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">New request</a>
+        <a href="/requests" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">New request</a>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -100,7 +100,7 @@ export default function MerchantPage() {
           <ul className="mt-3 divide-y divide-slate-100">
             {sales.slice(0, 10).map((t: any) => (
               <li key={t.id} className="py-2">
-                <a href={`/transactions/${t.reference}`} className="flex items-center justify-between text-sm hover:text-emerald-600">
+                <a href={`/transactions/${t.reference}`} className="flex items-center justify-between text-sm hover:text-indigo-600">
                   <div>
                     <p className="font-medium">{t.sender_name} <span className="text-slate-400">@{t.sender_username}</span></p>
                     <p className="text-xs text-slate-500">{new Date(t.created_at).toLocaleString()} · {t.reference}</p>

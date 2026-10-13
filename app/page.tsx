@@ -11,8 +11,8 @@ export default function Home() {
         Test environment: balances on this demo are simulated and labeled as test funds. Not real money.
       </p>
       <div className="mt-8 flex justify-center gap-4">
-        <Link href="/register" className="rounded bg-emerald-600 px-5 py-2 text-white hover:bg-emerald-700">Get started</Link>
-        <Link href="/login" className="rounded border border-emerald-600 px-5 py-2 text-emerald-700 hover:bg-emerald-50">Login</Link>
+        <Link href="/register" className="rounded bg-indigo-600 px-5 py-2 text-white hover:bg-indigo-700">Get started</Link>
+        <Link href="/login" className="rounded border border-indigo-600 px-5 py-2 text-emerald-700 hover:bg-slate-50">Login</Link>
       </div>
       <div className="mt-12 grid gap-4 text-left md:grid-cols-2">
         {[
