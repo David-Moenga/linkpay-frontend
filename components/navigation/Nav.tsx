@@ -61,14 +61,22 @@ export default function Nav() {
 
       {authed && (
         <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-border bg-white/95 backdrop-blur md:hidden">
-          {APP_NAV.map((n) => (
-            <Link key={n.href} href={n.href} className="flex min-h-[44px] flex-col items-center justify-center py-2 text-[11px] font-medium text-slate-600 hover:text-[#2563eb]">
-              {n.label}
-            </Link>
-          ))}
+          {APP_NAV.map((n) => {
+            const active = pathname === n.href || pathname?.startsWith(n.href + "/");
+            return (
+              <Link
+                key={n.href}
+                href={n.href}
+                className={`flex min-h-[44px] flex-col items-center justify-center py-2 text-[11px] font-semibold transition ${
+                  active ? "text-[#2563eb]" : "text-slate-600 hover:text-[#2563eb]"
+                }`}
+              >
+                {n.label}
+              </Link>
+            );
+          })}
         </nav>
       )}
-      {authed && <div className="h-14 md:hidden" aria-hidden />}
     </>
   );
 }

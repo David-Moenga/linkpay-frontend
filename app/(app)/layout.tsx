@@ -42,34 +42,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid gap-6 md:grid-cols-[15rem_1fr]">
       <Sidebar />
-      <div className="min-w-0 space-y-6">
-        <div className="md:hidden">
-          <div className="flex gap-2 overflow-x-auto pb-2 text-xs">
-            {[
-              { href: "/dashboard", label: "Home" },
-              { href: "/send", label: "Send" },
-              { href: "/receive", label: "Receive" },
-              { href: "/requests", label: "Requests" },
-              { href: "/history", label: "History" },
-              { href: "/merchant", label: "Merchant" },
-            ].map((l) => (
-              <LinkChip key={l.href} href={l.href} label={l.label} />
-            ))}
-          </div>
-        </div>
-        {children}
-      </div>
+      <div className="min-w-0 space-y-6 overflow-x-hidden">{children}</div>
     </div>
-  );
-}
-
-function LinkChip({ href, label }: { href: string; label: string }) {
-  return (
-    <a
-      href={href}
-      className="whitespace-nowrap rounded-full border border-border bg-white px-3 py-1.5 font-medium text-charcoal-700 shadow-sm"
-    >
-      {label}
-    </a>
   );
 }

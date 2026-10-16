@@ -95,14 +95,14 @@ export default function DashboardPage() {
             {walletData?.account_type?.replace("_", " ")} · {walletData?.public_id}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/send" className="rounded-md bg-gold-600 px-4 py-2 text-sm font-bold text-charcoal-900 transition hover:bg-gold-500 hover:shadow-md">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Link href="/send" className="rounded-md bg-gold-600 px-4 py-2 text-center text-sm font-bold text-charcoal-900 transition hover:bg-gold-500 hover:shadow-md">
             Send money
           </Link>
-          <Link href="/receive" className="rounded-md border border-border-strong px-4 py-2 text-sm font-semibold text-charcoal-700 transition hover:bg-surface-2">
+          <Link href="/receive" className="rounded-md border border-border-strong px-4 py-2 text-center text-sm font-semibold text-charcoal-700 transition hover:bg-surface-2">
             Receive
           </Link>
-          <Link href="/requests" className="rounded-md border border-border-strong px-4 py-2 text-sm font-semibold text-charcoal-700 transition hover:bg-surface-2">
+          <Link href="/requests" className="rounded-md border border-border-strong px-4 py-2 text-center text-sm font-semibold text-charcoal-700 transition hover:bg-surface-2">
             New request
           </Link>
         </div>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card variant="dark" className="lg:col-span-2">
           <p className="text-sm text-slate-300">Available balance</p>
-          <p className="mt-1 text-5xl font-bold tracking-tight text-white tabular-nums">
+          <p className="mt-1 text-4xl sm:text-5xl font-bold tracking-tight text-white tabular-nums break-all">
             {walletData?.currency} {Number(walletData?.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </p>
           <p className="mt-2 text-xs text-slate-400">Test balance (simulated). Not real money.</p>
@@ -149,8 +149,8 @@ export default function DashboardPage() {
               <dd className="font-medium text-charcoal-900">{walletData?.currency}</dd>
             </div>
             <div className="flex items-center justify-between gap-3">
-              <dt className="text-muted">Public ID</dt>
-              <dd className="font-medium text-charcoal-900 font-mono text-xs">{walletData?.public_id}</dd>
+              <dt className="text-muted shrink-0">Public ID</dt>
+              <dd className="font-medium text-charcoal-900 font-mono text-xs truncate max-w-[10rem]">{walletData?.public_id}</dd>
             </div>
             <div className="flex items-center justify-between gap-3">
               <dt className="text-muted">Joined</dt>
@@ -259,9 +259,9 @@ export default function DashboardPage() {
                 <li key={t.id}>
                   <Link
                     href={`/transactions/${t.reference}`}
-                    className="flex items-center justify-between py-3 -mx-2 px-2 rounded-md hover:bg-surface-2 transition"
+                    className="flex items-center justify-between gap-3 py-3 -mx-2 px-2 rounded-md hover:bg-surface-2 transition"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
                       <span
                         className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold ${
                           t.recipient_username === me ? "bg-success-soft text-success" : "bg-surface-2 text-charcoal-600"
@@ -277,7 +277,7 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="shrink-0 text-right">
                       <p className={`text-sm font-semibold tabular-nums ${t.recipient_username === me ? "text-success" : "text-charcoal-900"}`}>
                         {t.recipient_username === me ? "+" : "-"}
                         {Number(t.amount).toLocaleString()} {t.currency}
